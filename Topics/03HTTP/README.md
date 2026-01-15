@@ -357,37 +357,37 @@ Headers are grouped into four main types:
 Request headers help the server understand the client’s environment, preferences, and capabilities.
 
 	
-User-Agent - Identifies the client software (browser, app, or device) making the request.
-Authorization - Contains credentials (token, API key, etc.) for authentication.
-Cookie - Sends stored cookies from the client to the server.
-Accept - Specifies the media types the client can handle (JSON, HTML, XML, e
+(1)User-Agent - Identifies the client software (browser, app, or device) making the request.
+(2)Authorization - Contains credentials (token, API key, etc.) for authentication.
+(3)Cookie - Sends stored cookies from the client to the server.
+(4)Accept - Specifies the media types the client can handle (JSON, HTML, XML, e
 
 ## 2. General Headers
 
 General headers can be used in both requests and responses.
 
 
-Date - Specifies the date and time when the message was sent.
-Cache-Control - 	Directs caching behavior (e.g., public, private, no-cache).
-Connection - Controls whether the connection stays open or closes after the message.
+(1)Date - Specifies the date and time when the message was sent.
+(2)Cache-Control - 	Directs caching behavior (e.g., public, private, no-cache).
+(3)Connection - Controls whether the connection stays open or closes after the message.
 
 ## 3. Representation Headers
 
 Representation headers describe the format and encoding of the message body.
 
 Header	
-Content-Type - Specifies the MIME type of the body (e.g., application/json).
-Content-Length - Indicates the size of the body in bytes.
-Content-Encoding - Specifies any compression used on the body (gzip, deflate).
-ETag - Provides a unique identifier for a specific version of the resource (used for caching).
+(1)Content-Type - Specifies the MIME type of the body (e.g., application/json).
+(2)Content-Length - Indicates the size of the body in bytes.
+(3)Content-Encoding - Specifies any compression used on the body (gzip, deflate).
+(4)ETag - Provides a unique identifier for a specific version of the resource (used for caching).
 
 ## 4. Security Headers
 
 Security headers enhance the security of requests and responses.
 
 Header	
-Strict-Transport-Security (HSTS) - Forces the client to use HTTPS for future requests.
-Content-Security-Policy (CSP) - Defines which resources are allowed to be loaded, preventing XSS attacks.
-X-Frame-Options - Prevents clickjacking by controlling if the page can be embedded in a frame.
-X-Content-Type-Options - Stops browsers from MIME type sniffing to prevent attacks.
-Set-Cookie - Sends a cookie from server to client with optional security flags.
+(1)Strict-Transport-Security (HSTS) - Forces the client to use HTTPS for future requests.
+(2)Content-Security-Policy (CSP) - Defines which resources are allowed to be loaded, preventing XSS attacks.
+(3)X-Frame-Options - Prevents clickjacking by controlling if the page can be embedded in a frame.
+(4)X-Content-Type-Options - Stops browsers from MIME type sniffing to prevent attacks.
+(5)Set-Cookie - Sends a cookie from server to client with optional security flags.
