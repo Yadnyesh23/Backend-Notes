@@ -219,37 +219,71 @@ There are two types of messages - Request message and Response message
 (1)Request Message - It is the one that is send by the client
 (2)Response Message - It i sthe one that is sent by the server to the client
 
-## Complete HTTP Request Example
+## 1. HTTP Request Message
 
-Each Request message will contain Http method, Resourse, Http version, Host, headers and body
+An HTTP request message is sent by the client
+(browser, mobile app, or another service)
+to request a resource or perform an action on the server.
 
-POST /login HTTP/1.1  ----> Method Resourse Http version
-Host: example.com     
-User-Agent: Mozilla/5.0   -----------
-Content-Type: application/json      |--->Headers
-Authorization: Bearer <token>--------
+### Structure of an HTTP Request
 
-{                          -----
-  "username": "john_doe",       |---> Request Body
-  "password": "123456"          |
-}                          -----
+Each HTTP request message contains:
+- HTTP Method
+- Resource (URL / Path)
+- HTTP Version
+- Headers
+- Request Body (optional)
 
+### Complete HTTP Request Example
+POST /login HTTP/1.1        # Method, Resource, HTTP Version
+Host: example.com
+User-Agent: Mozilla/5.0
+Content-Type: application/json
+Authorization: Bearer <token>   # Headers
 
-## Complete HTTP Response Example
-HTTP/1.1 200 OK                  -----> Http version, status code and status message
-Content-Type: application/json   ---------
-Content-Length: 128                      |---->Headers
-Date: Tue, 16 Jan 2026 10:30:00 GMT      |
-Server: nginx                    ---------
+{
+  "username": "john_doe",
+  "password": "123456"
+}                               # Request Body
 
-{                                 ---------------
-  "success": true,                              |
-  "message": "User fetched successfully",       |
-  "data": {                                     |
-    "id": 101,                                  |----> Response Body
-    "username": "john_doe",                     |
-    "email": "john@example.com"                 |
-  }                                             |
-}                               -----------------
+## 2. HTTP Response Message
+
+An HTTP response message is sent by the server
+after processing the client’s request.
+
+### Structure of an HTTP Response
+
+Each HTTP response message contains:
+- HTTP Version
+- Status Code
+- Status Message
+- Headers
+- Response Body (optional)
+
+### Complete HTTP Response Example
+HTTP/1.1 200 OK                 # HTTP Version, Status Code, Status Message
+Content-Type: application/json
+Content-Length: 128
+Date: Tue, 16 Jan 2026 10:30:00 GMT
+Server: nginx                   # Headers
+
+{
+  "success": true,
+  "message": "User fetched successfully",
+  "data": {
+    "id": 101,
+    "username": "john_doe",
+    "email": "john@example.com"
+  }
+}                               # Response Body
+
+## Important Notes
+
+- Request messages are always initiated by the client
+- Response messages are always sent by the server
+- Headers carry metadata about the message
+- Body contains actual data (JSON, HTML, text, files)
+- Body is optional and depends on HTTP method and status code
+
 
 
