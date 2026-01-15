@@ -213,3 +213,43 @@ The latest version optimized for modern networks.
 **Pros:** Uses QUIC over UDP, eliminating TCP head-of-line blocking and improving performance on unreliable networks.  
 **Cons:** More complex to implement and not fully supported on all legacy systems.
 
+# HTTP Message
+There are two types of messages - Request message and Response message
+
+(1)Request Message - It is the one that is send by the client
+(2)Response Message - It i sthe one that is sent by the server to the client
+
+## Complete HTTP Request Example
+
+Each Request message will contain Http method, Resourse, Http version, Host, headers and body
+
+POST /login HTTP/1.1  ----> Method Resourse Http version
+Host: example.com     
+User-Agent: Mozilla/5.0   -----------
+Content-Type: application/json      |--->Headers
+Authorization: Bearer <token>--------
+
+{                          -----
+  "username": "john_doe",       |---> Request Body
+  "password": "123456"          |
+}                          -----
+
+
+## Complete HTTP Response Example
+HTTP/1.1 200 OK                  -----> Http version, status code and status message
+Content-Type: application/json   ---------
+Content-Length: 128                      |---->Headers
+Date: Tue, 16 Jan 2026 10:30:00 GMT      |
+Server: nginx                    ---------
+
+{                                 ---------------
+  "success": true,                              |
+  "message": "User fetched successfully",       |
+  "data": {                                     |
+    "id": 101,                                  |----> Response Body
+    "username": "john_doe",                     |
+    "email": "john@example.com"                 |
+  }                                             |
+}                               -----------------
+
+
