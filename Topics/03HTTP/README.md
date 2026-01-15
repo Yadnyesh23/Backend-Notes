@@ -391,3 +391,72 @@ Header
 (3)X-Frame-Options - Prevents clickjacking by controlling if the page can be embedded in a frame.
 (4)X-Content-Type-Options - Stops browsers from MIME type sniffing to prevent attacks.
 (5)Set-Cookie - Sends a cookie from server to client with optional security flags.
+
+# HTTP Methods
+Http method exist to represent the different kind of actions a client can request on a server.
+
+## HTTP Methods
+(1) GET - Used to the response from the server
+(2) POST - Used to Send the data from client to servre
+(3) PUT - Used to replace or update the complete data
+(4) PATCH - Used to update the specific part of data
+(5) DELETE - Used to delete
+
+# HTTP Methods
+
+HTTP methods define the **type of action** a client wants the server to perform on a resource.  
+They are also called **verbs** and are essential for RESTful API design.
+
+---
+
+## Common HTTP Methods
+
+| Method | Description |
+|--------|-------------|
+| **GET** | Requests data from the server without modifying it. |
+| **POST** | Sends data from the client to the server to create a new resource. |
+| **PUT** | Replaces or updates a complete resource with new data. |
+| **PATCH** | Updates a specific part of a resource without replacing the whole. |
+| **DELETE** | Deletes a specified resource on the server. |
+
+---
+
+## Important Notes
+
+- HTTP methods are **idempotent** if repeating them has the same effect:
+  - **GET, PUT, DELETE** → idempotent  
+  - **POST, PATCH** → generally **not idempotent**
+- Choosing the correct method is important for **API design, caching, and security**.
+- Methods are **case-sensitive** and usually written in **uppercase**.
+
+---
+
+## Example Usage
+
+```http
+# GET request
+GET /users/101 HTTP/1.1
+Host: example.com
+
+# POST request
+POST /users HTTP/1.1
+Host: example.com
+Content-Type: application/json
+
+{
+  "username": "john_doe",
+  "email": "john@example.com"
+}
+
+# PATCH request
+PATCH /users/101 HTTP/1.1
+Host: example.com
+Content-Type: application/json
+
+{
+  "email": "new_email@example.com"
+}
+
+# DELETE request
+DELETE /users/101 HTTP/1.1
+Host: example.com
