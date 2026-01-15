@@ -167,3 +167,49 @@ This includes:
 However, understanding lower layers
 helps in debugging performance, networking,
 and production issues.
+
+
+# Evolution of HTTP
+
+HTTP (HyperText Transfer Protocol) has evolved over time
+to improve performance, reliability, and scalability
+as the web has grown in complexity.
+
+This document explains the major HTTP versions
+along with their advantages and limitations.
+
+## HTTP/0.9 (1991)
+
+The first and simplest version of HTTP.
+
+**Pros:** Extremely simple and lightweight, suitable for early text-based web communication.  
+**Cons:** Supported only GET requests, plain text responses, and had no headers, status codes, or metadata.
+
+## HTTP/1.0 (1996)
+
+Introduced structure and metadata to HTTP communication.
+
+**Pros:** Added request/response headers, status codes, and support for different content types.  
+**Cons:** Opened a new TCP connection for every request, leading to high latency and poor performance.
+
+## HTTP/1.1 (1997)
+
+Became the long-standing standard for web communication.
+
+**Pros:** Introduced persistent connections and request pipelining, reducing connection overhead.  
+**Cons:** Still suffered from head-of-line blocking due to sequential request processing.
+
+## HTTP/2 (2015)
+
+Designed to significantly improve performance and efficiency.
+
+**Pros:** Enabled multiplexing, binary framing, and header compression, greatly improving speed.  
+**Cons:** Built on TCP, so packet loss could block all streams (TCP-level head-of-line blocking).
+
+## HTTP/3 (2022)
+
+The latest version optimized for modern networks.
+
+**Pros:** Uses QUIC over UDP, eliminating TCP head-of-line blocking and improving performance on unreliable networks.  
+**Cons:** More complex to implement and not fully supported on all legacy systems.
+
