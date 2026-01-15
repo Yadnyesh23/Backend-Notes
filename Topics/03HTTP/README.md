@@ -459,4 +459,124 @@ Content-Type: application/json
 
 # DELETE request
 DELETE /users/101 HTTP/1.1
-Host: example.com
+Host: example.com 
+```
+
+
+
+# OPTIONS Method and CORS Flow
+
+The **OPTIONS** HTTP method plays a key role in the **CORS (Cross-Origin Resource Sharing)** flow.
+
+CORS is a browser security mechanism that controls how resources on a web server can be requested from a different origin (domain, protocol, or port). It works using HTTP headers to explicitly allow or restrict cross-origin requests, preventing unauthorized access to sensitive data. Proper CORS configuration is critical in production environments to balance security and legitimate cross-origin communication.
+
+---
+
+## Types of CORS Request Flows
+
+There are **two types of CORS request flows**:
+
+1. **Simple Request**
+2. **Preflighted Request**
+
+---
+
+## 1. Simple Request Flow
+
+Assume:
+- Frontend (client) is hosted on `https://example.com`
+- Backend (server) is hosted on `https://api.example.com`
+
+### Client Request (Simple GET Request)
+
+```
+GET /api/products/123 HTTP/1.1
+Host: api.example.com
+Origin: https://example.com
+
+Accept: application/json
+```
+
+
+### Server Behavior
+
+- The server checks whether the `Origin` is allowed.
+- If allowed, it includes the `Access-Control-Allow-Origin` header in the response.
+
+### Server Response
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+Access-Control-Allow-Origin: https://example.com
+
+{
+"product": {
+"id": 123,
+"name": "xyz"
+}
+}
+```
+
+
+### Important Notes
+
+- The browser allows access to the response **only if**:
+  - `Access-Control-Allow-Origin` matches the request origin, or
+  - `Access-Control-Allow-Origin: *` is used (not recommended for authenticated or sensitive data).
+- Without this header, the browser blocks the response even if the server returns data.
+
+---
+
+## 2. Preflighted Request Flow
+
+A request becomes **preflighted** when **any** of the following conditions are met:
+
+- The HTTP method is **not** `GET`, `POST`, or `HEAD` (e.g., `PUT`, `DELETE`)
+- The request includes **non-simple headers** (e.g., `Authorization`, `X-Custom-Header`)
+- The `Content-Type` is **not** one of:
+  - `application/x-www-form-urlencoded`
+  - `multipart/form-data`
+  - `text/plain`
+
+In these cases, the browser sends a **preflight request** using the **OPTIONS** method **before** making the actual request.
+
+---
+
+### Preflight Request (OPTIONS)
+
+```
+OPTIONS /api/users HTTP/1.1
+Host: api.example.com
+Origin: https://frontend.example.com
+
+Access-Control-Request-Method: POST
+Access-Control-Request-Headers: Content-Type, Authorization
+```
+
+
+### Server Response to Preflight
+
+```
+HTTP/1.1 204 No Content
+Access-Control-Allow-Origin: https://frontend.example.com
+
+Access-Control-Allow-Methods: GET, POST, PUT, DELETE
+Access-Control-Allow-Headers: Content-Type, Authorization
+```
+
+
+### What Happens Next
+
+- The browser validates the server’s response.
+- If the requested method and headers are allowed, the browser proceeds with the actual request.
+- If not allowed, the browser blocks the request before it reaches application logic.
+
+---
+
+## Summary
+
+- **OPTIONS** is used by the browser for CORS preflight checks.
+- Simple requests do not require preflight.
+- Preflighted requests ensure the server explicitly allows potentially unsafe operations.
+- Correct CORS configuration is essential for secure and reliable production systems.
