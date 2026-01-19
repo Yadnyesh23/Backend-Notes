@@ -580,3 +580,101 @@ Access-Control-Allow-Headers: Content-Type, Authorization
 - Simple requests do not require preflight.
 - Preflighted requests ensure the server explicitly allows potentially unsafe operations.
 - Correct CORS configuration is essential for secure and reliable production systems.
+
+
+# HTTP Response Status Codes
+
+HTTP response status codes are used to communicate the result of a client’s request in a standardized way.  
+They inform the client whether the request was successful, failed, or requires further action.
+
+Status codes are **3-digit numbers**, grouped by their first digit.
+
+---
+
+## Status Code Categories
+
+- **1xx → Informational**
+- **2xx → Success**
+- **3xx → Redirection**
+- **4xx → Client Errors**
+- **5xx → Server Errors**
+
+---
+
+## Common Status Codes and Their Usage
+
+### ✅ Success Responses (2xx)
+
+- **200 (OK)**  
+  Indicates that the request was successful and the server returned the requested data (commonly used with `GET`).
+
+- **201 (Created)**  
+  Indicates that the request was successful and a new resource has been created (commonly used with `POST`).
+
+- **204 (No Content)**  
+  Indicates that the request was successful, but the server has no content to return (commonly used for CORS preflight `OPTIONS` responses or delete operations).
+
+---
+
+### 🔁 Redirection Responses (3xx)
+
+- **301 (Moved Permanently)**  
+  Indicates that the requested resource has been permanently moved to a new URL, and future requests should use the new URL.
+
+- **302 (Found)**  
+  Indicates a temporary redirection where the resource is available at a different URL for now, but the original URL should continue to be used.
+
+- **304 (Not Modified)**  
+  Indicates that the cached version of the resource is still valid, so the server does not resend the response body, improving performance.
+
+---
+
+### ❌ Client Error Responses (4xx)
+
+- **400 (Bad Request)**  
+  Indicates that the server cannot process the request due to invalid or malformed client data.
+
+- **401 (Unauthorized)**  
+  Indicates that authentication is required or the provided credentials are missing or invalid.
+
+- **403 (Forbidden)**  
+  Indicates that the client is authenticated but does not have permission to access the requested resource.
+
+- **404 (Not Found)**  
+  Indicates that the request was successful, but the requested resource does not exist on the server.
+
+- **405 (Method Not Allowed)**  
+  Indicates that the HTTP method used is not supported for the requested resource.
+
+- **409 (Conflict)**  
+  Indicates a conflict with the current state of the resource (e.g., creating a resource with a duplicate unique value).
+
+- **429 (Too Many Requests)**  
+  Indicates that the client has sent too many requests in a given time frame and has hit the rate limit.
+
+---
+
+### ⚠️ Server Error Responses (5xx)
+
+- **500 (Internal Server Error)**  
+  Indicates an unexpected error occurred on the server.
+
+- **501 (Not Implemented)**  
+  Indicates that the server does not support the requested HTTP method, but it may be implemented in the future.
+
+- **502 (Bad Gateway)**  
+  Indicates that the server received an invalid response from an upstream server.
+
+- **503 (Service Unavailable)**  
+  Indicates that the server is temporarily unavailable, usually due to overload or maintenance.
+
+- **504 (Gateway Timeout)**  
+  Indicates that the server did not receive a timely response from an upstream server.
+
+---
+
+## Summary
+
+- Status codes help clients understand **what happened** with a request.
+- Proper usage of status codes improves **API clarity, debugging, and client handling**.
+- Correct status codes are essential for **production-grade APIs**.
