@@ -678,3 +678,16 @@ Status codes are **3-digit numbers**, grouped by their first digit.
 - Status codes help clients understand **what happened** with a request.
 - Proper usage of status codes improves **API clarity, debugging, and client handling**.
 - Correct status codes are essential for **production-grade APIs**.
+
+
+# HTTP Caching
+http caching is the technique used to store the copies of responses for reuse.
+Reducec bandwith, reducec server load and increases efficiency
+
+There are 3 important headers used for caching 
+(1)Cache-Control
+(2)ETag
+(3)Last-Modified
+
+**E-Tag:** A hash of the resource. If the E-Tag matches the server's version, it returns `304 Not Modified` to save bandwidth.
+**Cache-Control:** Defines how long (max-age) a resource can be stored locally.
