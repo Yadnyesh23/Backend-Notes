@@ -691,3 +691,7 @@ There are 3 important headers used for caching
 
 **E-Tag:** A hash of the resource. If the E-Tag matches the server's version, it returns `304 Not Modified` to save bandwidth.
 **Cache-Control:** Defines how long (max-age) a resource can be stored locally.
+
+# Content Negotiation & Compression
+**Content Negotiation:** Client and server agree on format (JSON vs XML) and language.
+**Compression:** Using `gzip` or `deflate` to reduce file sizes (e.g., shrinking a 26MB JSON to 3.8MB).
