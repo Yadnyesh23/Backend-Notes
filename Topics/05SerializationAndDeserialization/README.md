@@ -50,3 +50,11 @@ JSON (JavaScript Object Notation) is the most popular standard for web communica
     "name": "Sriniously"
   }
 }
+```
+
+## The WorkflowClient Side: 
+### JavaScript Object -> JSON.stringify() -> JSON String.
+### Network: JSON String travels via HTTP.
+### Server Side: JSON String -> JSON.parse() (or library equivalent) -> Rust/Java/Python Object.
+
+#### Note for Backend Engineers: Your responsibility usually lies at the Application Layer. You ensure the "Contract" (the JSON structure) is followed so that both systems can communicate regardless of the underlying network complexity.
