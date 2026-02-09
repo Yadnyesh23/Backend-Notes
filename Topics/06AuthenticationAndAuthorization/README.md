@@ -88,3 +88,8 @@
 - Logout is harder to implement  
 - Token size is larger than a session ID  
 - Sensitive data should not be stored in the payload
+
+
+### 3. OAuth 2.0 & OIDC
+- **OAuth 2.0:** Delegation. (e.g., Letting an app post to your Twitter).
+- **OpenID Connect:** Identity. (e.g., "Login with Google").
