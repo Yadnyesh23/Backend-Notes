@@ -348,3 +348,46 @@ OAuth 2.0 was a complete rewrite designed for flexibility and ease of use.
 
 ---
 
+# 5) OIDC: OpenID Connect (The Identity Layer)
+
+While OAuth 2.0 solved the problem of **Authorization** (what you can do), it didn't actually solve **Authentication** (who you are). OIDC was created to fill that gap.
+
+---
+
+## The Problem: "The Identity Gap"
+Before OIDC, developers tried to use OAuth 2.0 for login. However, OAuth 2.0 only gives the app a "key" (token) to access data; it doesn't tell the app anything about the person holding the key.
+
+**The "Valet Key" Analogy:**
+* **OAuth 2.0** is like a valet key. It gives the driver permission to move your car, but the key doesn't tell the driver your name, address, or employee ID. 
+* **OIDC** is like showing your **Driver’s License**. It proves exactly who you are.
+
+---
+
+## What is OIDC?
+OIDC is a simple **identity layer** built on top of the OAuth 2.0 protocol. It allows clients to verify the identity of the end-user based on the authentication performed by an Authorization Server.
+
+### What problem did it solve?
+1.  **Standardized Login:** Before OIDC, every company (Facebook, Google, Twitter) had their own way of sharing user profiles. OIDC made it a universal standard.
+2.  **SSO (Single Sign-On):** It allows you to use one account (like Google or Microsoft) to sign into thousands of different websites securely.
+3.  **User Info:** It provides a standard way to get a user’s name, email, and profile picture.
+
+---
+
+##  How it works: The ID Token
+OIDC uses the same flow as OAuth 2.0, but with one major addition: the **ID Token**.
+
+When you log in via OIDC, the server sends back:
+1.  **Access Token:** (OAuth 2.0) To call APIs.
+2.  **ID Token:** (OIDC) A **JWT** (JSON Web Token) that contains user information.
+
+### The ID Token Contents (Example):
+```json
+{
+  "iss": "[https://accounts.google.com](https://accounts.google.com)",
+  "sub": "1234567890",
+  "aud": "my-travel-app-id",
+  "exp": 1700000000,
+  "name": "John Doe",
+  "email": "john.doe@gmail.com",
+  "picture": "[https://example.com/photo.jpg](https://example.com/photo.jpg)"
+}
