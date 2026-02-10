@@ -93,3 +93,92 @@
 ### 3. OAuth 2.0 & OIDC
 - **OAuth 2.0:** Delegation. (e.g., Letting an app post to your Twitter).
 - **OpenID Connect:** Identity. (e.g., "Login with Google").
+
+### Cookies
+
+- **What it is:**  
+  A cookie is a small piece of data stored in the browser and automatically sent with every HTTP request to the same domain.
+
+- **Why cookies exist:**  
+  Cookies solve HTTP’s stateless nature by allowing servers to store information on the client and receive it back on subsequent requests.
+
+- **How it works:**  
+  1. Server sends a `Set-Cookie` header in the response.  
+  2. Browser stores the cookie.  
+  3. Browser automatically sends the cookie with future requests.
+
+- **Common Uses:**  
+  - Storing session IDs  
+  - Storing JWTs  
+  - User preferences (theme, language)  
+  - Analytics and tracking
+
+- **Cookies vs Sessions vs JWT:**  
+
+  | Concept | Purpose | Where Data Lives |
+  |------|--------|------------------|
+  | Cookie | Storage + transport | Browser |
+  | Session | Stateful authentication | Server |
+  | JWT | Stateless authentication | Client |
+
+- **Relation with Sessions:**  
+  Cookies commonly store a `session_id`, while the actual session data (userId, role, login state) is stored on the server (Redis/DB).
+
+- **Relation with JWT:**  
+  Cookies can store JWTs, which contain signed user data and are verified by the server on each request.
+
+- **Common Misconceptions:**  
+  - Cookies themselves are not insecure; security depends on proper flags.  
+  - Cookies and sessions are not the same thing.  
+  - JWT does not replace cookies; it only replaces server-side sessions.  
+  - Cookies should never store sensitive data like passwords.
+
+- **Important Cookie Flags:**  
+  - `HttpOnly`: Prevents JavaScript access to cookies.  
+  - `Secure`: Sends cookies only over HTTPS.  
+  - `SameSite`: Helps prevent CSRF attacks.
+
+# Understanding Cookies: What do they actually store?
+
+A cookie stores small, simple **key–value data** that the browser automatically sends to the server with every request. 
+
+> **The Golden Rule:** A cookie is a pointer, not a database. It's meant to be lightweight.
+
+---
+
+## 🔍 Anatomy of a Cookie
+When a server wants to set a cookie, it sends a header like this:
+`Set-Cookie: sessionId=abc123; HttpOnly; Secure; SameSite=Lax`
+
+**The Browser Stores:**
+* **Key:** `sessionId`
+* **Value:** `abc123`
+
+---
+
+## 🛠 Real-World Examples
+
+### 1. Blog App (Session-based Login)
+* **On Login (Server Response):** `Set-Cookie: sessionId=xyz789`
+* **On `/profile` (Browser Request):** The browser automatically attaches `Cookie: sessionId=xyz789`.
+
+📌 **Note:** The cookie does **not** store your username or email. Those details live in your Session storage (Redis/DB) on the server.
+
+### 2. E-commerce App (Preferences vs. Cart)
+* **User Preference:** `Set-Cookie: currency=INR`
+* **The Cart:** Usually stored in a Database or Server Session.
+
+❌ **Why not the cart?** Cart data is often too large for the cookie size limit and is insecure if stored client-side.
+
+### 3. JWT (JSON Web Token)
+The server sends a signed string:
+`Set-Cookie: accessToken=eyJhbGciOiJIUzI1Ni...`
+
+**Inside the JWT (Decoded on Server):**
+```json
+{
+  "userId": 7,
+  "role": "user",
+  "exp": 1700000000
+}
+```
