@@ -245,3 +245,28 @@ In stateless authentication, the server does not store any session data.
 - Server does **not store user session data**.
 - All required authentication data is carried inside the token itself.
 - Server only verifies the token signature — no database lookup is required.
+
+## 3) API Keys: The "Software Password"
+
+An API Key is a unique identifier used to authenticate requests between different software systems. It is primarily used for **Machine-to-Machine** or **Service-to-UI** interactions.
+
+### The Need & Problem Solved
+In modern development, servers need to talk to other servers. API Keys solve three main problems:
+
+1.  **Identification:** It tells the provider *who* is calling (e.g., "This is the 'WeatherApp' calling").
+2.  **Rate Limiting:** It prevents a single user from crashing the server by limiting them to a specific number of requests per minute.
+3.  **Billing & Tracking:** For paid services (like Google Maps or OpenAI), the key tracks usage so the provider knows how much to charge you.
+
+###  When is it used?
+* **Third-party Integrations:** When your app needs to pull data from a service like GitHub, Stripe, or Google Maps.
+* **Backend Automation:** When your server needs to trigger an action on another server (e.g., sending an email via SendGrid).
+* **Public Data Fetching:** Accessing live data feeds like stock prices or weather updates.
+
+###  Example Workflow
+1.  **Obtain:** You sign up for an API (e.g., OpenWeather) and receive a key: `xyz-789-api-key`.
+2.  **Request:** Your server sends this key in the header or URL:
+    `GET /data?city=London&apikey=xyz-789-api-key`
+3.  **Validate:** The platform's server checks the key. If valid, it grants your server access to the data.
+
+###  Security Note
+API keys are long-lived and "static." If someone steals your key, they can impersonate your application. **Never** commit API keys to public GitHub repositories; always use `.env` files.
