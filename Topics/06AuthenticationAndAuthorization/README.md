@@ -182,3 +182,17 @@ The server sends a signed string:
   "exp": 1700000000
 }
 ```
+
+## Types of Authentication Models
+
+### 1) Stateful Authentication
+Server stores user session data and identifies users using a session ID sent with each request.
+
+### 2) Stateless Authentication
+Server does not store sessions; client sends a signed token (like JWT) on every request for verification.
+
+### 3) API Key Authentication
+Client authenticates by sending a static API key that identifies and authorizes access to an application or service.
+
+### 4) OAuth 2.0 Authentication
+User authenticates via a trusted third-party provider, which issues tokens to access resources without sharing passwords.
