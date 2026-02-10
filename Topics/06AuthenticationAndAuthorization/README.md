@@ -219,3 +219,29 @@ In stateful authentication, the server maintains the user’s authentication sta
 📌 **Important Notes**
 - Passwords are **never stored** in sessions.
 - Session data lives on the **server**, not the client.
+
+
+## 2) Stateless Authentication
+
+In stateless authentication, the server does not store any session data.
+
+**Step 1: Login**
+- User logs in using username and password.
+- Server validates the credentials.
+- Server generates a **signed JWT** containing user-related claims (e.g. `userId`, role, expiry).
+
+**Step 2: Token Delivery**
+- The signed JWT is sent to the client (commonly via cookies or local storage).
+
+**Step 3: Authorized Requests**
+- For every protected request, the client sends the JWT  
+  (usually in the `Authorization: Bearer <token>` header).
+
+**Step 4: Token Verification**
+- Server verifies the JWT signature and expiry.
+- If valid, user identity is extracted from the token and access is granted.
+
+📌 **Why JWT is Stateless**
+- Server does **not store user session data**.
+- All required authentication data is carried inside the token itself.
+- Server only verifies the token signature — no database lookup is required.
