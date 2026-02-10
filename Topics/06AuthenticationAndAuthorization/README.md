@@ -196,3 +196,26 @@ Client authenticates by sending a static API key that identifies and authorizes 
 
 ### 4) OAuth 2.0 Authentication
 User authenticates via a trusted third-party provider, which issues tokens to access resources without sharing passwords.
+
+
+## 1) Stateful Authentication
+
+In stateful authentication, the server maintains the user’s authentication state.
+
+**Step 1: Login**
+- User logs in using username and password.
+- Server validates the credentials.
+- Server creates a session and stores session data (e.g. `userId`, role, login state) in memory or a database (Redis/DB).
+- A unique `session_id` is generated.
+
+**Step 2: Session Sharing**
+- Server sends the `session_id` to the client via a cookie.
+
+**Step 3: Authenticated Requests**
+- On every request, the browser automatically sends the `session_id` via cookies.
+- Server looks up the session data using the `session_id`.
+- If the session is valid, access is granted.
+
+📌 **Important Notes**
+- Passwords are **never stored** in sessions.
+- Session data lives on the **server**, not the client.
