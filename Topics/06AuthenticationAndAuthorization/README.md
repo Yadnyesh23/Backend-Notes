@@ -391,3 +391,22 @@ When you log in via OIDC, the server sends back:
   "email": "john.doe@gmail.com",
   "picture": "[https://example.com/photo.jpg](https://example.com/photo.jpg)"
 }
+```
+
+## 4. Choosing the Right Authentication
+Use this matrix to decide which method fits your current project architecture.
+
+| Auth Type | Best For | Architecture |
+| :--- | :--- | :--- |
+| **Stateful (Session)** | Traditional Web Apps | Server-rendered (EJS, PHP, Django). Server tracks user in memory/DB. |
+| **Stateless (JWT)** | Modern APIs / SPAs | React, Vue, Mobile Apps. Server verifies the token signature on every request. |
+| **OAuth 2.0 / OIDC** | Social Login | "Sign in with Google/GitHub." Accessing 3rd-party data. |
+| **API Keys** | System Integration | Server-to-server or background scripts. No human "login" involved. |
+
+
+
+---
+
+## Quick Decision Summary
+1.  **Monolith/Simple Website?** → Use **Stateful Sessions**.
+2.  **Mobile App or React frontend?** → Use **Stateless JWTs**.
