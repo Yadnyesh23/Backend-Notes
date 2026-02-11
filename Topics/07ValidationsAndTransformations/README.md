@@ -378,3 +378,156 @@ Used in real-world business rules.
 - Business conditions  
 
 Strong validation = Secure + Stable + Production-ready backend.
+
+## 🔄 Transformations (Sanitization)
+
+Transformations (also called sanitization) prepare incoming data before it reaches your business logic or database.
+
+Unlike validation (which checks correctness), transformation **modifies data into a safe and consistent format**.
+
+This ensures:
+- Cleaner database records
+- Consistent comparisons
+- Fewer unexpected bugs
+- Better security
+
+---
+
+## Why Transform Data?
+
+User input is often:
+- Inconsistent
+- Poorly formatted
+- Case-sensitive
+- Containing extra spaces
+- In the wrong type
+
+If stored as-is, it can cause:
+- Duplicate records
+- Matching issues
+- Query errors
+- Security risks
+
+So we sanitize it early.
+
+---
+
+## Common Transformation Types
+
+### 1️⃣ Casting (Type Conversion)
+
+Converting data into the correct type before using it.
+
+Example: Query parameters are always strings.
+
+```http
+GET /users?page=5
+```
+
+Received:
+```
+page = "5"  // string
+```
+
+Transform:
+```
+page = 5  // number
+```
+
+Without casting:
+- Pagination may break
+- Arithmetic operations may fail
+
+---
+
+### 2️⃣ Normalization (Standardization)
+
+Making data consistent for storage and comparison.
+
+Example: Emails are case-insensitive.
+
+```json
+{
+  "email": "User@Email.Com "
+}
+```
+
+Transform:
+```
+"user@email.com"
+```
+
+Steps:
+- Trim spaces
+- Convert to lowercase
+
+Without normalization:
+- `"User@email.com"` and `"user@email.com"` could be treated as different users.
+
+---
+
+### 3️⃣ Formatting (Restructuring Data)
+
+Adjusting the structure before saving.
+
+Example: Phone number formatting.
+
+Input:
+```
+9876543210
+```
+
+Transform:
+```
++919876543210
+```
+
+Other examples:
+- Formatting dates to ISO format (`YYYY-MM-DD`)
+- Removing special characters from usernames
+- Hashing passwords before storing
+
+---
+
+### 4️⃣ Trimming & Cleaning
+
+Removing unwanted characters.
+
+Example:
+```json
+{
+  "username": "   Yadnyesh   "
+}
+```
+
+Transform:
+```
+"Yadnyesh"
+```
+
+This prevents unnecessary database inconsistencies.
+
+---
+
+## Important Rule
+
+> Validate → Then Transform → Then Process
+
+1. Validate input
+2. Sanitize / transform data
+3. Pass clean data to service layer
+
+---
+
+## Summary
+
+| Action | Purpose |
+|--------|---------|
+| Validation | Check if data is correct |
+| Transformation | Make data clean and consistent |
+
+Sanitization ensures your backend remains:
+- Predictable  
+- Secure  
+- Consistent  
+- Production-ready  
