@@ -531,3 +531,12 @@ Sanitization ensures your backend remains:
 - Secure  
 - Consistent  
 - Production-ready  
+
+## Frontend vs. Backend: The Gold Rule
+| Feature | Frontend Validation | Backend Validation |
+| :--- | :--- | :--- |
+| **Primary Goal** | User Experience (UX) | Security & Data Integrity |
+| **Reliability** | Low (Can be bypassed) | High (Final Authority) |
+| **Tooling** | HTML5, React/Vue State | Joi, Zod, Class-Validator |
+
+> **Note:** Never rely on the Frontend for security. If a user hits your API via **Postman** or **cURL**, your Frontend checks are completely bypassed.
