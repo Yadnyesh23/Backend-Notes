@@ -71,3 +71,53 @@ This pattern solves:
 - Code readability problem
 
 ---
+
+# 🧱 Layer 1: Handler (The Gatekeeper 🚪)
+
+## ❓ What is it?
+
+The **Handler** is the entry point of your application.
+
+It talks to:
+- HTTP request
+- Streamlit UI
+- Telegram message
+- REST API call
+
+It understands:
+- JSON
+- HTTP
+- Status codes
+- User input
+
+---
+
+## ❓ What exactly does it do?
+
+It:
+- Parses JSON → Converts into Python dict
+- Validates input
+- Calls service layer
+- Returns HTTP response
+
+It DOES NOT:
+- Talk directly to database
+- Contain business logic
+- Perform heavy calculations
+
+---
+
+### Example (Login API)
+
+```python
+@app.post("/login")
+def login_handler(request):
+    data = request.json()
+    
+    if "email" not in data:
+        return {"error": "Email required"}, 400
+    
+    result = auth_service.login(data["email"], data["password"])
+    
+    return result, 200
+```
