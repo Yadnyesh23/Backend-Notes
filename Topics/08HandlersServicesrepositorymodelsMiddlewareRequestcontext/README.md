@@ -200,3 +200,87 @@ Client sends a request to buy a course.
 purchase_service.buy_course(user_id, course_id, payment_token)
 ```
 
+# Layer 3: Repository Layer (The Data Access Layer)
+
+## What is the Repository Layer?
+
+The **Repository Layer** is responsible for handling all interactions with the database.
+
+It is the layer that:
+- Executes SQL / NoSQL queries
+- Fetches data from database
+- Inserts new records
+- Updates existing records
+- Deletes records
+- Maps database rows/documents into application objects
+
+It acts as a **bridge between your application and the database**.
+
+The repository does NOT contain business logic.
+It only deals with data persistence.
+
+---
+
+##  Why is the Repository Layer Needed?
+
+Without a repository layer:
+
+- Database queries get scattered across controllers and services.
+- Code becomes tightly coupled to a specific database.
+- Changing the database becomes painful.
+- Testing becomes difficult.
+
+The repository layer ensures:
+- Clean separation of concerns
+- Database abstraction
+- Easier database switching
+- Better maintainability
+- Easier mocking in tests
+
+---
+
+##  What Problem Does It Solve?
+
+### 1️⃣ Prevents Database Logic in Controllers
+Controllers should not write SQL queries.
+
+### 2️⃣ Prevents Database Logic in Services
+Services should focus on business rules, not SQL syntax.
+
+### 3️⃣ Reduces Tight Coupling
+If tomorrow you switch from MongoDB to PostgreSQL,
+only the repository changes.
+
+### 4️⃣ Improves Testability
+You can mock repository methods during testing without needing a real database.
+
+---
+
+## What Exactly Does the Repository Do?
+
+The repository:
+
+- Runs database queries
+- Converts raw database data into usable objects
+- Handles low-level data access logic
+- Returns clean data to the service layer
+
+It does NOT:
+- Apply business rules
+- Handle HTTP
+- Validate request input
+- Format API responses
+
+---
+
+##  How It Works (Flow Example)
+
+### Example: User Login System
+
+### Step 1️⃣ Controller Receives Request
+- Parses JSON
+- Calls service
+
+```python
+auth_service.login(email, password)
+```
