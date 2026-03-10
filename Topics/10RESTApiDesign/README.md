@@ -192,3 +192,52 @@ Example:
 JavaScript sent to browsers
 
 However, most APIs do not use this constraint, so it is considered optional.
+
+## How a typical url is made:-
+```
+https://sriniously.xyz/blog/zist/?q=something#header
+```
+
+**https** : 
+Transfer Protocol.Full Form : HyperText Transfer Protocol Secure
+It defines how the browser communicates with the server.
+Uses TLS/SSL encryption to secure the data.
+
+**sriniously.xyz** : Domain name
+This is the human-readable address of the server.
+It maps to an IP address using DNS.
+```
+sriniously.xyz
+│          │
+│          └── Top Level Domain (TLD)
+└───────────── Second Level Domain
+```
+
+**/blog/zist/** : Resource Path
+This tells the server which resource/page we want.
+
+**?q=something** : 
+Query parameters send extra data to the server.
+
+Example usage:
+
+search queries
+filters
+pagination
+
+**#header** :
+
+A fragment does not go to the server.
+It tells the browser to scroll to a specific section in the page.
+
+Example HTML 
+```
+<h1 id="header">Title</h1>
+```
+
+|Component	| Value |
+|Transfer Protocol|	https |
+|Domain Name	| sriniously.xyz |
+|Resource Path |	/blog/zist/ | 
+|Query Parameter |	q=something |
+|Fragment	| #header |
