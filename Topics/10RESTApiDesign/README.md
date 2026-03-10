@@ -241,3 +241,23 @@ Example HTML
 |Resource Path |	/blog/zist/ | 
 |Query Parameter |	q=something |
 |Fragment	| #header |
+
+##  Core Design Principles
+How you name your endpoints determines the predictability of your API.
+* **Use Plural Nouns:** Always use plurals for collections.
+    * ✅ `/users`
+    * ❌ `/user`
+
+When we want to access a single user, we still use /users because we are retrieving a specific document from the users resource.
+To access a specific document, we typically use either an ID or a slug.
+A slug is a URL-friendly identifier that represents a resource in a readable format.
+Slugs are usually written in lowercase, and if multiple words are present, they are separated by underscores.
+```
+/api/v1/book/harry_potter
+```
+Here, harry_potter is the slug that uniquely identifies the book.
+
+* **Avoid Abbreviations:** Keep fields intuitive and readable.
+    * ✅ `description`, `category_id`
+    * ❌ `desc`, `cat_id
+
