@@ -269,3 +269,28 @@ Here, harry_potter is the slug that uniquely identifies the book.
 | **PUT** | Replace | Update a resource entirely. | Idempotent |
 | **PATCH** | Modify | Update specific fields of a resource. | Idempotent |
 | **DELETE** | Remove | Delete a resource. | Idempotent |
+
+## Steps to design a api 
+1. **Design the UI** :- The first step in API design is to design the user interface using tools such as Figma, Adobe XD, or any wireframing tool.
+
+Designing the UI helps us understand:
+
+What data the frontend needs
+How the data will be displayed
+What user interactions will occur (forms, buttons, filters, etc.)
+
+2. **Identify the Resources from the Frontend Design** :- Once the UI and frontend flows are designed, we can analyze them to determine the resources required by the application.
+
+A resource represents a key entity in the system, such as:
+
+users
+books
+orders
+payments
+products
+
+By studying the frontend screens, we can identify:
+
+What resources exist
+What operations need to be performed on them (create, read, update, delete)
+How the frontend will request the data
