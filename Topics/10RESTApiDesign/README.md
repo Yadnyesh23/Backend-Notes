@@ -261,3 +261,11 @@ Here, harry_potter is the slug that uniquely identifies the book.
     * ✅ `description`, `category_id`
     * ❌ `desc`, `cat_id
 
+### 2. HTTP Methods (Verbs)
+| Method | Action | Use Case | Idempotency/Non-Idempptency |
+| :--- | :--- | :--- | :--- |
+| **GET** | Read | Fetch a resource or collection. | Idempotent |
+| **POST** | Create | Create a new resource. | Non-Idempotent
+| **PUT** | Replace | Update a resource entirely. | Idempotent |
+| **PATCH** | Modify | Update specific fields of a resource. | Idempotent |
+| **DELETE** | Remove | Delete a resource. | Idempotent |
