@@ -294,3 +294,38 @@ By studying the frontend screens, we can identify:
 What resources exist
 What operations need to be performed on them (create, read, update, delete)
 How the frontend will request the data
+
+## Task to do while developing apis :-
+### 1. Design-First Documentation
+Before writing a single line of code, design your API interface. Use **interactive documentation** tools like **Swagger (OpenAPI)** or **Postman**.
+* **Goal:** Create a "contract" that frontend and backend teams can agree upon.
+* **Benefit:** Allows for mocking and testing the interface logic without waiting for the full implementation.
+
+
+
+### 2. Intuitive & Consistent Design
+An API is a product. If it’s consistent, it becomes predictable and easy to learn.
+* **Plural Nouns:** Use `/users` instead of `/user`.
+* **Standard Verbs:** Stick to HTTP methods strictly (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`).
+* **Consistency:** If you use `camelCase` for one JSON response, use it for all of them.
+
+### 3. Provide Sane Defaults
+Don't force the client to provide every single detail if the server can make a logical assumption.
+* **Example:** * If a user creates a profile and leaves the `status` blank, default it to `active`.
+    * If a search request omits `limit`, default it to `10` or `20` instead of returning 0 or 1,000,000 records.
+
+### 4. Avoid Abbreviations
+Prioritize **readability** over brevity. Short names save bytes but cost developer time in confusion.
+* ✅ **Do:** `description`, `transaction_id`, `created_at`
+* ❌ **Don't:** `desc`, `txn_id`, `ca_dt`
+
+---
+
+## 📊 Summary of Implementation
+
+| Task | Action Item | Example |
+| :--- | :--- | :--- |
+| **Documentation** | Use Swagger/OpenAPI | `http://api.yoursite.com/docs` |
+| **Consistency** | Use Plural Nouns | `/organizations` |
+| **Logic** | Set Default Values | `status: "pending"` by default |
+| **Clarity** | Full Descriptive Names | `is_authenticated` vs `is_auth` |
