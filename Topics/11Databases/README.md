@@ -38,3 +38,13 @@ DBMS enforces "business rules" or constraints, such as ensuring a primary key is
 
 4) Security-
 The system controls who can see or change specific data through authentication and role-based permissions. It also provides logging and encryption to protect sensitive information from unauthorized access or accidental loss.
+
+# Why not text files instead of DBMS :
+1) Parsing :
+Parsing a text file requires loading the data into memory and manually splitting strings, which is incredibly slow and resource-intensive for large datasets. In contrast, a DBMS uses highly optimized binary formats and indexing to retrieve specific data in milliseconds without reading the entire file.
+
+2) Structure : 
+Text files are "unstructured" or "loosely structured," making it difficult to enforce data types or relationships between different sets of information. A DBMS uses a strict schema to ensure that every piece of data follows a predefined format, preventing "corrupt" data (like a name appearing in a phone number field) from being saved.
+
+3) Concurrency :
+If two users try to write to the same text file at the exact same moment, the file will likely become corrupted or one user's changes will be overwritten. A DBMS handles concurrency control by using locking mechanisms and transactions, allowing thousands of users to read and write simultaneously without data loss.
