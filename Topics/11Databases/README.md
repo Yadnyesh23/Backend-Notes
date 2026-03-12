@@ -48,3 +48,17 @@ Text files are "unstructured" or "loosely structured," making it difficult to en
 
 3) Concurrency :
 If two users try to write to the same text file at the exact same moment, the file will likely become corrupted or one user's changes will be overwritten. A DBMS handles concurrency control by using locking mechanisms and transactions, allowing thousands of users to read and write simultaneously without data loss.
+
+# Difference between Relational and Non-Relational databases :
+
+| Feature | Relational (SQL) | Non-Relational (NoSQL) |
+| :--- | :--- | :--- |
+| **Data Model** | Tabular (Rows and Columns) | Document, Key-Value, Graph, or Wide-column |
+| **Schema** | **Fixed:** Schema must be defined before adding data. | **Dynamic:** Schema can be changed on the fly (Schemaless). |
+| **Relationships** | Uses **Foreign Keys** and **Joins** to link tables. | Data is often **Nested** or denormalized in one record. |
+| **Scaling** | **Vertical:** Increase CPU/RAM on a single server. | **Horizontal:** Add more servers to a distributed cluster. |
+| **Transactions** | Follows **ACID** (Atomicity, Consistency, Isolation, Durability). | Follows **BASE** (Basically Available, Soft state, Eventual consistency). |
+| **Best For** | Complex queries, financial systems, and structured data. | Large-scale data, real-time analytics, and rapid development. |
+| **Examples** | PostgreSQL, MySQL, Oracle, SQL Server | MongoDB, Redis, Cassandra, DynamoDB |
+
+---
