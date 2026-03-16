@@ -1,0 +1,2 @@
+## 🔍 What is Caching?
+Caching is a mechanism designed to **decrease latency** and computational overhead by storing a **subset of data** in a high-speed storage layer. This allows subsequent requests for that data to be served faster than fetching it from its primary, slower source.
