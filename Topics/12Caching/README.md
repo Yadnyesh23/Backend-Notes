@@ -28,3 +28,37 @@ This example demonstrates the **Cache-Aside (Lazy Loading)** strategy used to ha
 * **Availability:** If the External Weather API crashes, the system can still serve the "last known" cached weather to users.
 
 ---
+## What is CDN ?
+A **Content Delivery Network (CDN)** is a global network of servers that store copies of content (like videos) so that when you hit **Play** the data only has to travel a few miles to your house, rather than thousands of miles from a main headquarters.
+
+# 🎬 Case Study: Netflix & Content Delivery Networks (CDN)
+
+Netflix uses a custom CDN architecture called **Open Connect** to serve billions of hours of content with zero buffering.
+
+---
+
+## 🚀 How it Works (The "Edge" Strategy)
+
+1.  **Predictive Loading:** Netflix predicts what you'll watch and "pushes" those files to local servers during off-peak hours (nighttime).
+2.  **Local Storage:** High-performance hardware called **OCAs (Open Connect Appliances)** are installed directly inside your ISP's data center.
+3.  **Shortened Path:** When you hit **Play**, the video streams from a server in your city, not from Netflix HQ.
+
+---
+
+## 💎 Key Benefits of CDN Caching
+
+* **Latency Elimination:** Reduces the physical distance data must travel.
+* **ISP Efficiency:** Saves internet providers money by keeping massive video traffic within their own local networks.
+* **High Availability:** If one local server fails, the system automatically redirects you to the next closest one.
+
+---
+
+##  Technical Logic: Adaptive Bitrate Caching
+
+Netflix doesn't just cache one version of a movie; it caches **hundreds** of small chunks at different qualities:
+
+| Quality | Bitrate | Use Case |
+| :--- | :--- | :--- |
+| **4K / UHD** | High | Stable Fiber/Ethernet connections |
+| **1080p / HD** | Medium | Standard Home Wi-Fi |
+| **480p / SD** | Low | Weak cellular signals / Commuting |
