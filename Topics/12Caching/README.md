@@ -69,3 +69,49 @@ Netflix doesn't just cache one version of a movie; it caches **hundreds** of sma
 | **4K / UHD** | High | Stable Fiber/Ethernet connections |
 | **1080p / HD** | Medium | Standard Home Wi-Fi |
 | **480p / SD** | Low | Weak cellular signals / Commuting |
+
+## 3. Levels of Caching
+
+### A. Network Level
+* **CDN:** Caches static assets (Images, Videos, JS/CSS) on geographically distributed "Edge" servers.
+* **DNS Caching:** Browsers, Operating Systems, and ISPs cache IP addresses to avoid the slow recursive lookup process.
+## CDN Working
+
+
+1. When a user accesses a website, the browser sends a **DNS request**.
+2. This request is routed to the nearest **PoP (Point of Presence)**, also known as an edge server.
+3. DNS routing decisions are based on:
+   - User’s geographic location  
+   - Network latency/speed  
+
+4. At the PoP:
+   - If the requested content is available in cache → **Cache Hit** (fast response)
+   - If not available → **Cache Miss**
+
+5. In case of a cache miss:
+   - The PoP fetches data from the **origin server**
+   - Stores it in cache
+   - Serves it to the user
+
+---
+
+## DNS Working
+
+The **Domain Name System (DNS)** translates domain names into IP addresses.
+
+1. The browser sends a **DNS query** to a **recursive resolver** (usually provided by the ISP).
+2. The resolver checks its **local cache**:
+   - If found → returns the IP address
+
+3. If not found:
+   - Queries the **Root DNS Server**
+
+4. The root server responds with the address of the **TLD (Top-Level Domain) server** (e.g., `.com`, `.org`).
+
+5. The resolver queries the **TLD server**, which returns the **Authoritative Name Server**.
+
+6. The resolver queries the **Authoritative Name Server**, which provides the **actual IP address**.
+
+7. The resolver:
+   - Returns the IP to the browser
+   - Caches the result for future use
