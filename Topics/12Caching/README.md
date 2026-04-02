@@ -1,117 +1,232 @@
-## 🔍 What is Caching?
-Caching is a mechanism designed to **decrease latency** and computational overhead by storing a **subset of data** in a high-speed storage layer. This allows subsequent requests for that data to be served faster than fetching it from its primary, slower source.
+##  What is Caching?
+Caching is a mechanism designed to **decrease latency** and computational overhead by storing a **subset of data** in a high-speed storage layer. This allows subsequent requests for that data to be served much faster than fetching it from its primary (and slower) source.
 
 ---
-## Real-World Examples
+
+##  Real-World Examples
 
 | Platform | Use Case | Benefit |
 | :--- | :--- | :--- |
-| **Google Search** | Caching results for common queries (e.g., "weather"). | Avoids re-running expensive ranking algorithms for every search. |
-| **Netflix** | **CDN (Content Delivery Network)** at Edge locations. | Minimizes buffering by serving video from the server closest to the user. |
-| **X (Twitter)** | Storing "Trending Topics" in in-memory stores like **Redis**. | Avoids analyzing billions of tweets in real-time for every user refresh. |
+| **Google Search** | Caching results for common queries (e.g., "weather") | Avoids re-running expensive ranking algorithms for every search |
+| **Netflix** | CDN (Content Delivery Network) at Edge locations | Minimizes buffering by serving video from the nearest server |
+| **X (Twitter)** | Storing "Trending Topics" in in-memory stores like Redis | Avoids analyzing billions of tweets in real-time |
 
-## Caching Google Weather Data
+---
+
+## 🌦 Caching Google Weather Data
 
 This example demonstrates the **Cache-Aside (Lazy Loading)** strategy used to handle high-frequency requests for slowly-changing data.
 
 ---
 
-## 🛠 The Workflow
+## 🛠 Workflow
 
-1.  **User Request:** A user searches for "Weather in London."
-2.  **Cache Lookup:** The backend checks **Redis** (In-Memory Store) for the key `weather_london`.
-    * **Cache Hit:** Data is found and returned in **<1ms**.
-    * **Cache Miss:** Data is missing or expired; proceed to step 3.
-3.  **Heavy Lift:** The server fetches fresh data from an **External Weather API** (e.g., OpenWeather). This is slow (~500ms) and often costs money per request.
-4.  **Update Cache:** The server saves the fresh data into Redis with a **TTL (Time to Live)** of 15 minutes.
-5.  **Response:** The user receives the weather data.
-
----
-
-## 💡 Key Technical Concepts
-
-* **TTL (Time to Live):** We set a 15-minute expiration so users don't see "Sunny" if it starts "Raining" an hour later.
-* **Cost Optimization:** Instead of 1,000,000 expensive API calls, the system only makes **1 call every 15 minutes** (96 calls per day).
-* **Availability:** If the External Weather API crashes, the system can still serve the "last known" cached weather to users.
----
-
-## What is CDN ?
-A **Content Delivery Network (CDN)** is a global network of servers that store copies of content (like videos) so that when you hit **Play** the data only has to travel a few miles to your house, rather than thousands of miles from a main headquarters.
-
-# 🎬 Case Study: Netflix & Content Delivery Networks (CDN)
-
-Netflix uses a custom CDN architecture called **Open Connect** to serve billions of hours of content with zero buffering.
+1. **User Request:** A user searches for "Weather in London"
+2. **Cache Lookup:** The backend checks **Redis (In-Memory Store)** for key `weather_london`
+   - **Cache Hit:** Data is found → returned in **<1ms**
+   - **Cache Miss:** Data missing/expired → go to step 3
+3. **Heavy Lift:** Fetch fresh data from **External Weather API** (e.g., OpenWeather)
+   - Slow (~500ms)  
+   - May incur cost per request  
+4. **Update Cache:** Store fresh data in Redis with **TTL (Time to Live)** = 15 minutes  
+5. **Response:** Return weather data to user  
 
 ---
 
-## 🚀 How it Works (The "Edge" Strategy)
+##  Key Technical Concepts
 
-1.  **Predictive Loading:** Netflix predicts what you'll watch and "pushes" those files to local servers during off-peak hours (nighttime).
-2.  **Local Storage:** High-performance hardware called **OCAs (Open Connect Appliances)** are installed directly inside your ISP's data center.
-3.  **Shortened Path:** When you hit **Play**, the video streams from a server in your city, not from Netflix HQ.
+- **TTL (Time to Live):** Ensures data expires (e.g., prevents showing outdated weather)
+- **Cost Optimization:** Instead of 1,000,000 API calls → only **1 call per 15 minutes (~96/day)**
+- **High Availability:** If API fails, system can still serve **last cached data**
 
 ---
 
-## 💎 Key Benefits of CDN Caching
+##  What is CDN?
+A **Content Delivery Network (CDN)** is a globally distributed network of servers that store cached copies of content (videos, images, static files).  
 
-* **Latency Elimination:** Reduces the physical distance data must travel.
-* **ISP Efficiency:** Saves internet providers money by keeping massive video traffic within their own local networks.
-* **High Availability:** If one local server fails, the system automatically redirects you to the next closest one.
+ When you hit **Play**, data travels from the **nearest server**, not a distant origin → faster load times.
+
+---
+
+#  Case Study: Netflix & CDN
+
+Netflix uses a custom CDN called **Open Connect** to deliver billions of hours of content efficiently.
+
+---
+
+##  How It Works (Edge Strategy)
+
+1. **Predictive Loading:** Netflix predicts what users will watch and pushes content during off-peak hours  
+2. **Local Storage:** Uses **OCAs (Open Connect Appliances)** inside ISP data centers  
+3. **Shortened Path:** Streams video from nearby servers, not Netflix HQ  
+
+---
+
+##  Benefits of CDN Caching
+
+- **Low Latency:** Reduces physical distance between user and data  
+- **ISP Efficiency:** Keeps heavy traffic inside local networks  
+- **High Availability:** Automatic failover to nearby servers  
 
 ---
 
 ##  Technical Logic: Adaptive Bitrate Caching
 
-Netflix doesn't just cache one version of a movie; it caches **hundreds** of small chunks at different qualities:
+Netflix caches content in **small chunks across multiple quality levels**:
 
 | Quality | Bitrate | Use Case |
 | :--- | :--- | :--- |
-| **4K / UHD** | High | Stable Fiber/Ethernet connections |
-| **1080p / HD** | Medium | Standard Home Wi-Fi |
-| **480p / SD** | Low | Weak cellular signals / Commuting |
+| **4K / UHD** | High | Stable fiber/Ethernet |
+| **1080p / HD** | Medium | Home Wi-Fi |
+| **480p / SD** | Low | Weak networks / mobile |
 
-## 3. Levels of Caching
-
-### A. Network Level
-* **CDN:** Caches static assets (Images, Videos, JS/CSS) on geographically distributed "Edge" servers.
-* **DNS Caching:** Browsers, Operating Systems, and ISPs cache IP addresses to avoid the slow recursive lookup process.
-## CDN Working
-
-
-1. When a user accesses a website, the browser sends a **DNS request**.
-2. This request is routed to the nearest **PoP (Point of Presence)**, also known as an edge server.
-3. DNS routing decisions are based on:
-   - User’s geographic location  
-   - Network latency/speed  
-
-4. At the PoP:
-   - If the requested content is available in cache → **Cache Hit** (fast response)
-   - If not available → **Cache Miss**
-
-5. In case of a cache miss:
-   - The PoP fetches data from the **origin server**
-   - Stores it in cache
-   - Serves it to the user
+ Player dynamically switches quality based on internet speed (**Adaptive Bitrate Streaming**)
 
 ---
 
-## DNS Working
+#  Levels of Caching
+
+## A.  Network Level
+
+- **CDN:** Caches static assets (Images, Videos, JS/CSS) on edge servers  
+- **DNS Caching:** Browsers, OS, and ISPs cache IPs to avoid repeated lookups  
+
+---
+
+##  CDN Working
+
+1. User accesses a website → browser sends **DNS request**
+2. Request is routed to nearest **PoP (Point of Presence / Edge Server)**
+3. Routing based on:
+   - Geographic location  
+   - Network latency  
+
+4. At PoP:
+   - **Cache Hit → Fast response**
+   - **Cache Miss → Fetch from origin server**
+
+5. On Cache Miss:
+   - Fetch data from **Origin Server**
+   - Store in cache
+   - Serve to user
+
+---
+
+##  DNS Working
 
 The **Domain Name System (DNS)** translates domain names into IP addresses.
 
-1. The browser sends a **DNS query** to a **recursive resolver** (usually provided by the ISP).
-2. The resolver checks its **local cache**:
-   - If found → returns the IP address
+### Steps:
+
+1. Browser sends **DNS query** to **Recursive Resolver (ISP)**
+2. Resolver checks **local cache**
+   - Found → return IP  
 
 3. If not found:
-   - Queries the **Root DNS Server**
+   - Query **Root DNS Server**
 
-4. The root server responds with the address of the **TLD (Top-Level Domain) server** (e.g., `.com`, `.org`).
+4. Root → returns **TLD Server** (.com, .org)
 
-5. The resolver queries the **TLD server**, which returns the **Authoritative Name Server**.
+5. Resolver → queries **TLD Server**
 
-6. The resolver queries the **Authoritative Name Server**, which provides the **actual IP address**.
+6. TLD → returns **Authoritative Name Server**
 
-7. The resolver:
-   - Returns the IP to the browser
-   - Caches the result for future use
+7. Resolver → queries Authoritative Server → gets **actual IP**
+
+8. Resolver:
+   - Returns IP to browser  
+   - Caches result  
+
+---
+
+## B. ⚙ Hardware Level
+
+- **CPU Cache:** L1, L2, L3 → ultra-fast access inside CPU  
+- **RAM:** Main memory (fast but volatile)  
+
+| Tier | Component | Speed | Capacity | Volatility | Scope |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **L1 Cache** | Level 1 | Fastest | ~64 KB | Volatile | Per-Core |
+| **L2 Cache** | Level 2 | Very Fast | ~256 KB–1 MB | Volatile | Per-Core |
+| **L3 Cache** | Level 3 | Fast | ~2–50 MB | Volatile | Shared |
+| **RAM** | Main Memory | Moderate | 8–128 GB+ | Volatile | System |
+| **Disk/SSD** | Storage | Slow | 256 GB–10 TB+ | Non-Volatile | Persistent |
+| **Network (NIC)** | External | Slowest | Infinite | N/A | Global |
+
+---
+
+###  Backend Context
+
+Technologies:
+- **Redis**
+- **Memcached**
+- **AWS ElastiCache**
+
+These provide:
+- **In-Memory Storage**
+- **NoSQL Databases**
+- **Key-Value Stores**
+
+---
+
+#  Caching Strategies
+
+## 1) Lazy Caching (Cache-Aside)
+
+Caching happens **only when data is requested**
+
+### Flow:
+- Request → Check cache  
+- Hit → Return data  
+- Miss → Fetch from DB → Store in cache → Return  
+
+ Most commonly used strategy  
+
+---
+
+## 2) Write-Through
+
+Data is written to **cache + database simultaneously**
+
+### Flow:
+- Write operation (POST/PUT/PATCH)
+- Update **DB + Cache together**
+
+### Benefit:
+- Cache always stays **consistent and fresh**
+
+---
+
+## 3) Eviction Policy
+
+Defines how cache handles **memory limits**
+
+### Why needed?
+Cache has limited size → must remove old data when full
+
+---
+
+### Types:
+
+- **No Eviction:**  
+  Cache full → new writes fail  
+
+- **LRU (Least Recently Used):**  
+  Removes least recently accessed data  
+
+- **LFU (Least Frequently Used):**  
+  Removes least frequently accessed data  
+
+- **TTL-Based:**  
+  Removes data based on expiration time  
+
+---
+
+##  Additional Insights
+
+ **When NOT to use caching:**
+- Highly dynamic data (e.g., stock prices, real-time systems)
+- Sensitive data (without proper security controls)
+- Low-read, high-write systems  
+
+---
