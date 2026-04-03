@@ -81,3 +81,34 @@ Instead of retrying immediately and overwhelming the server, the system waits fo
 | **Deserialization** | Reverts the stored format back into a code-ready object. |
 | **Handler** | Prepares the logic and calls external APIs. |
 | **Exponential Backoff** | Ensures the system doesn't crash during outages by spacing out retries. |
+
+## 2. Core Architecture
+
+The system follows a decoupled **Producer-Consumer** pattern, allowing the main application to remain performant while offloading heavy tasks to background workers.
+
+| Component | Role | Primary Responsibility |
+| :--- | :--- | :--- |
+| **Producer** | Application Logic | Serializes task data (e.g., JSON) and pushes it into the queue. |
+| **Broker** | Message Queue | Acts as a temporary holding area (buffer) for tasks. |
+| **Consumer** | Worker Process | Monitors the queue, dequeues, deserializes, and executes the handler. |
+
+---
+
+### 🛠️ Component Breakdown
+
+#### 📤 Producer 
+The **Producer** is the entry point within your application code. When a specific event occurs (like a user signup), the producer:
+* Gathers the necessary data.
+* **Serializes** that data into a standardized format (usually JSON).
+* Dispatches the message to the Broker.
+
+#### 🗄️ Broker / Queue 
+The **Broker** ensures that tasks are not lost if the consumer is busy or the system restarts. It provides a durable "waiting room" for your data.
+* **Common Technologies:** `RabbitMQ`, `Redis`, and `AWS SQS` 
+* **Purpose:** Decouples the speed of the Producer from the speed of the Consumer.
+
+#### ⚙️ Consumer / Worker (12:20–13:09, 28:52–29:36)
+The **Consumer** is a standalone process—often running on a different thread or server—that handles the "heavy lifting."
+* **Polling:** It constantly monitors the queue for new tasks.
+* **Deserialization:** It converts the JSON/Binary back into a native language object (e.g., Python Dict or Go Struct).
+* **Execution:** It passes the data to a **Handler** to perform the final job (like sending an email or processing an image).
