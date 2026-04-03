@@ -28,3 +28,56 @@ The primary goal is to **offload time-consuming, non-critical tasks** so the mai
 1. **Producer:** Your API receives a request and "pushes" a task to a queue.
 2. **Broker:** A storage layer (like Redis or RabbitMQ) holds the task.
 3. **Worker:** A separate process pulls the task from the queue and executes the logic.
+
+
+### Architecture Overview
+
+1.  **User Trigger (The Producer)**
+    * A user signs up on the application.
+    * The main application process creates a **task** containing the signup data.
+
+2.  **Message Queue (The Buffer)**
+    * The task is **serialized** (converted from a native object to a format like JSON) and stored in a **Queue** (e.g., Redis, RabbitMQ).
+    * This ensures the main process isn't slowed down by waiting for an email to send.
+
+3.  **The Consumer (Background Process)**
+    * A separate process (the **Consumer**) polls the queue and pulls the task out.
+    * **Deserialization:** The consumer converts the raw data (JSON/String) back into a native language structure (Python `dict`, Go `struct`, or Node.js `object`).
+
+4.  **The Task Handler**
+    * The consumer passes the data to a **Handler**.
+    * The Handler's job is to structure the payload:
+        * Generating HTML templates for the email.
+        * Defining sender and receiver addresses.
+        * Managing API keys for the mail provider.
+
+5.  **External API Call**
+    * The Handler calls the external **Email Service Provider** (e.g., SendGrid, AWS SES, Mailgun).
+
+---
+
+### Error Handling & Retries
+
+If the task fails (e.g., the Email API is down), the system employs a reliability strategy:
+
+#### Exponential Backoff
+Instead of retrying immediately and overwhelming the server, the system waits for an increasing amount of time between each attempt.
+
+**The Logic:**
+* **1st Failure:** Retry in 2 seconds.
+* **2nd Failure:** Retry in 4 seconds.
+* **3rd Failure:** Retry in 8 seconds.
+* **Formula:** $t = b^n$ (where $b$ is the base delay and $n$ is the number of attempts).
+
+---
+
+### 🛠️ Summary Table
+
+| Component | Responsibility |
+| :--- | :--- |
+| **Producer** | Captures user data and pushes to the queue. |
+| **Queue** | Holds tasks reliably until a consumer is ready. |
+| **Consumer** | Runs in a separate process; handles the "heavy lifting." |
+| **Deserialization** | Reverts the stored format back into a code-ready object. |
+| **Handler** | Prepares the logic and calls external APIs. |
+| **Exponential Backoff** | Ensures the system doesn't crash during outages by spacing out retries. |
