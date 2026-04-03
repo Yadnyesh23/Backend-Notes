@@ -133,3 +133,25 @@ To handle intermittent failures gracefully, systems employ a strategy of increas
 * **Retries:** ally re-attAutomaticempting a task when it fails due to temporary issues (e.g., network jitter or external service downtime).
 * **Exponential Backoff:** Instead of retrying immediately—which could overwhelm a struggling service—the system waits progressively longer between each attempt (e.g., 1s, 2s, 4s, 8s...).
 * **Service Recovery:** This "breathing room" prevents a **retry storm**, giving downstream services time to recover and eventually process the request successfully.
+
+## 4. Types of Tasks
+
+### (1) One-Off Task
+A single, independent unit of work executed once. These are usually triggered by a specific user action or a system event.
+* **Example:** Sending a welcome email after a user signs up.
+* **Characteristic:** High priority, immediate execution, no repetition.
+
+### (2) Recurring Task
+Tasks that run repeatedly based on a specific schedule (often managed via Cron expressions).
+* **Example:** Generating a weekly billing report every Monday at 9:00 AM.
+* **Characteristic:** Predictable, automated, and time-dependent.
+
+### (3) Chained Task
+A sequence of tasks where the completion of one task triggers the next. This creates a functional pipeline.
+* **Example:** **Step 1:** Upload Image → **Step 2:** Resize Image → **Step 3:** Store in S3.
+* **Characteristic:** Sequential dependency; if one step fails, the subsequent steps are typically halted.
+
+### (4) Batch Task
+The execution of a large volume of similar tasks grouped together to be processed at once, often to optimize resource usage.
+* **Example:** Processing 10,000 credit card transactions at the end of the business day.
+* **Characteristic:** High throughput, typically non-interactive, and processed during low-traffic periods.
