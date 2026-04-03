@@ -155,3 +155,37 @@ A sequence of tasks where the completion of one task triggers the next. This cre
 The execution of a large volume of similar tasks grouped together to be processed at once, often to optimize resource usage.
 * **Example:** Processing 10,000 credit card transactions at the end of the business day.
 * **Characteristic:** High throughput, typically non-interactive, and processed during low-traffic periods.
+
+## 5. Design Considerations for Task Queues / Background Jobs
+
+### (1) Idempotency
+Idempotency ensures that performing an operation multiple times has the same effect as performing it once. In distributed systems, tasks may be delivered more than once (at-least-once delivery).
+* **Implementation:** Use unique task IDs or "idempotency keys" to check if a task has already been processed before executing it again.
+* **Why it matters:** Prevents duplicate actions, such as charging a customer twice for the same order.
+
+### (2) Error Handling
+Systems must gracefully handle failures to prevent data loss or infinite loops.
+* **Strategies:** * **Retries:** Automatically re-run failed tasks.
+    * **Dead Letter Queues (DLQ):** If a task fails repeatedly, move it to a separate queue for manual inspection.
+    * **Graceful Shutdown:** Ensure workers finish their current task before stopping during a deployment.
+
+### (3) Monitoring
+Visibility into the health of your queue is essential for maintaining system reliability.
+* **Key Metrics:** * **Queue Depth:** The number of pending tasks (indicates if you are falling behind).
+    * **Consumer Lag:** The time difference between when a task was added and when it was processed.
+    * **Failure Rate:** Percentage of tasks hitting the DLQ.
+
+### (4) Scaling
+As the volume of tasks grows, the system must be able to handle the increased load.
+* **Horizontal Scaling:** Add more worker nodes/processes to consume tasks from the queue in parallel.
+* **Auto-scaling:** Automatically spin up workers based on the **Queue Depth** metric.
+
+### (5) Ordering
+In some scenarios, tasks must be processed in the exact order they were received (FIFO - First In, First Out).
+* **Challenge:** Standard queues often prioritize throughput over strict ordering. 
+* **Solution:** Use specialized FIFO queues or "Message Grouping" (e.g., SQS FIFO) to ensure sequential processing for specific sets of data.
+
+### (6) Rate Limiting
+Rate limiting controls the pace at which tasks are processed to avoid overwhelming downstream resources (like a third-party API or a database).
+* **Implementation:** Use a "Token Bucket" or "Leaky Bucket" algorithm to throttle workers.
+* **Why it matters:** Prevents your background jobs from accidentally performing a Denial of Service (DoS) attack on your own infrastructure.
