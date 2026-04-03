@@ -107,8 +107,29 @@ The **Broker** ensures that tasks are not lost if the consumer is busy or the sy
 * **Common Technologies:** `RabbitMQ`, `Redis`, and `AWS SQS` 
 * **Purpose:** Decouples the speed of the Producer from the speed of the Consumer.
 
-#### ⚙️ Consumer / Worker (12:20–13:09, 28:52–29:36)
+#### ⚙️ Consumer / Worker 
 The **Consumer** is a standalone process—often running on a different thread or server—that handles the "heavy lifting."
 * **Polling:** It constantly monitors the queue for new tasks.
 * **Deserialization:** It converts the JSON/Binary back into a native language object (e.g., Python Dict or Go Struct).
 * **Execution:** It passes the data to a **Handler** to perform the final job (like sending an email or processing an image).
+
+## 3. Reliability & Performance
+
+### Visibility Timeout
+The **Visibility Timeout** is a critical safety mechanism used in message queues (e.g., AWS SQS, RabbitMQ) to ensure fault tolerance.
+
+* **Mechanism:** When a consumer retrieves a message, it is not deleted. Instead, the queue hides it from other consumers for a predefined duration.
+* **The Fail-Safe:** If the worker **crashes or fails** to acknowledge the task before the timeout expires, the message automatically becomes visible again.
+* **Outcome:** This ensures "at-least-once" delivery, allowing another worker to pick up the task so it isn't lost to transient system failures.
+
+> [!IMPORTANT]
+> **Key Concept:** A task is only permanently removed from the queue *after* the worker successfully processes it and sends an explicit **Delete/Acknowledge (ACK)** command.
+
+---
+
+### Retries & Exponential Backoff
+To handle intermittent failures gracefully, systems employ a strategy of increasing wait times between attempts.
+
+* **Retries:** ally re-attAutomaticempting a task when it fails due to temporary issues (e.g., network jitter or external service downtime).
+* **Exponential Backoff:** Instead of retrying immediately—which could overwhelm a struggling service—the system waits progressively longer between each attempt (e.g., 1s, 2s, 4s, 8s...).
+* **Service Recovery:** This "breathing room" prevents a **retry storm**, giving downstream services time to recover and eventually process the request successfully.
