@@ -133,3 +133,150 @@ Works well even with millions/billions of documents
 | Scalability         | Limited                | High 🚀        |
 
 ---
+
+## 3. Search Intelligence (16:12 - 22:05)
+
+Modern search engines are not just about finding matches—they focus on delivering the **most relevant results first**. This is achieved through advanced ranking algorithms and intelligent query handling.
+
+---
+
+### 🧠 Relevance Scoring (BM25 Algorithm)
+
+Search engines like Elasticsearch use the **BM25 (Best Matching 25)** algorithm to rank documents based on how relevant they are to a query.
+
+Instead of treating all matches equally, BM25 assigns a **score** to each document using multiple factors:
+
+#### 📌 1. Term Frequency (TF)
+- Measures how often a search term appears in a document  
+- Higher frequency → Higher relevance  
+
+👉 Example:
+- Doc A: "laptop laptop laptop" → more relevant  
+- Doc B: "laptop" (only once) → less relevant  
+
+---
+
+#### 📌 2. Document Frequency (DF)
+- Measures how common a term is across all documents  
+- Rare terms are **more valuable** than common ones  
+
+👉 Example:
+- "laptop" (common word) → lower impact  
+- "ultrabook" (rare word) → higher impact  
+
+This helps the system avoid overvaluing generic words.
+
+---
+
+#### 📌 3. Field Boosting
+- Not all fields are equally important  
+- Matches in certain fields are given **higher weight**
+
+👉 Example:
+- Match in **title** → very important  
+- Match in **description/content** → less important  
+
+Title: "Best Gaming Laptop" ✅ High priority
+Description: "...includes a laptop..." ❌ Lower priority
+
+
+---
+
+### 🤖 Typo Tolerance & Query Intelligence
+
+Modern search engines can **understand user intent**, even when queries are imperfect.
+
+#### 🔍 Features:
+
+- **Fuzzy Search (Typo Handling)**  
+  Detects and corrects misspellings  
+   "laptpo" → "laptop"
+
+
+- **"Did You Mean" Suggestions**  
+Suggests corrected queries when input is wrong  
+
+- **Autocomplete / Suggestions**  
+Predicts what the user is typing in real-time  
+
+---
+
+### 🚀 Why This Matters
+
+- Users get **accurate results instantly**  
+- Improves **user experience significantly**  
+- Critical for platforms like:
+- E-commerce (Amazon)  
+- Search engines (Google)  
+- Job portals, blogs, SaaS apps  
+
+---
+
+### 🆚 Without Search Intelligence
+
+| Scenario                          | Without BM25 | With BM25 |
+|----------------------------------|-------------|-----------|
+| Exact keyword match              | Same rank   | Ranked    |
+| Important fields (title vs body) | Ignored     | Prioritized |
+| Rare vs common words             | Same weight | Balanced  |
+| Typos                            | ❌ Fail     | ✅ Handled |
+
+---
+
+## 4. Practical Benchmarking 
+
+### 🧪 Test Case
+
+A performance comparison between **PostgreSQL** and **Elasticsearch** was conducted using a dataset of **50,000 records**.
+
+#### ⏱️ Results:
+- **PostgreSQL** → ~7.5 seconds  
+- **Elasticsearch** → ~500 milliseconds  
+
+👉 This demonstrates a **massive performance improvement** when using a search-optimized engine like Elasticsearch.
+
+---
+
+### Why the Difference?
+
+- **PostgreSQL**
+  - Uses traditional querying (`LIKE`, joins, etc.)
+  - Often performs full or partial scans
+  - Not optimized for full-text search at scale  
+
+- **Elasticsearch**
+  - Uses **inverted indexing**
+  - Performs direct lookups instead of scanning  
+  - Optimized for fast, real-time search queries  
+
+---
+
+### Key Takeaway
+
+- First, **master SQL and database optimization**
+  - Indexing
+  - Query optimization
+  - Schema design  
+
+- Then, use **Elasticsearch (or similar tools)** when:
+  - Your application is **search-heavy**
+  - You need features like:
+    - Type-ahead (autocomplete)
+    - Full-text search  
+    - Advanced filtering & ranking  
+    - Real-time search experience  
+
+---
+
+### When to Use What?
+
+| Use Case                        | PostgreSQL | Elasticsearch |
+|--------------------------------|------------|---------------|
+| CRUD operations                | ✅         | ❌            |
+| Transactional systems          | ✅         | ❌            |
+| Simple search                  | ✅         | ❌            |
+| Full-text search               | ⚠️ Limited | ✅            |
+| High-performance search        | ❌         | ✅            |
+| Autocomplete / suggestions     | ❌         | ✅            |
+
+---
