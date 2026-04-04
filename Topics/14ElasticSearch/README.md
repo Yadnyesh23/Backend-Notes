@@ -81,3 +81,55 @@ So instead of searching through all documents, the system directly retrieves the
 
 3. **Index Creation**
    - Each token is stored with a list of document IDs  
+   laptop → [doc1, doc3, doc10]
+   gaming → [doc1, doc8]
+
+
+4. **Searching**
+- Query is also tokenized  
+- Matching documents are fetched instantly from the index  
+
+---
+
+### 🚀 Why It’s Powerful
+
+- **Blazing Fast Search**  
+No full-table scans—direct lookup
+
+- **Efficient at Scale**  
+Works well even with millions/billions of documents  
+
+- **Supports Advanced Features**
+- Full-text search  
+- Ranking (TF-IDF, BM25)  
+- Fuzzy search (typos)  
+- Phrase matching  
+
+---
+
+### ⚙️ Technology
+
+**Elasticsearch** uses **Apache Lucene** as its core engine.
+
+- **Apache Lucene** handles:
+- Inverted index creation  
+- Query processing  
+- Ranking and scoring  
+
+- **Elasticsearch** adds:
+- REST APIs  
+- Distributed architecture  
+- Horizontal scalability  
+
+---
+
+### 🆚 Comparison with Relational DB
+
+| Feature              | Relational DB (`LIKE`) | Inverted Index |
+|---------------------|------------------------|----------------|
+| Search Method       | Full scan              | Direct lookup  |
+| Speed               | Slow                   | Fast ⚡        |
+| Relevance Ranking   | ❌ No                  | ✅ Yes         |
+| Scalability         | Limited                | High 🚀        |
+
+---
