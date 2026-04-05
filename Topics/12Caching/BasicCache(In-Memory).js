@@ -1,56 +1,64 @@
-import { promise } from 'bcrypt/promises'
-import express from 'express'
+import express from "express";
 
-const app = express()
+const app = express();
 
-const cache = new Map()
+const cache = new Map();
 
-// Fake external api call
-const fethcWeatherData = async(city) => {
-    console.log(`Fecthing weather data...`)
+// ✅ Fixed function
+const fetchWeatherData = async (city) => {
+    console.log("Fetching weather data...");
     return new Promise((resolve) => {
-        setTimeout((resolve) => {
+        setTimeout(() => {
             resolve({
                 city,
-                temp : Math.floor(Math.random() * 30)
-            })
+                temp: Math.floor(Math.random() * 30)
+            });
         }, 1000);
-    })
-}
+    });
+};
 
-// Api request to get weather
-app.get('/weather/:city', async(req, res) => {
-    const city = req.params
-    const key = `weather_${city}`
+app.get("/weather/:city", async (req, res) => {
+    const { city } = req.params;
+    const key = `weather_${city}`;
 
-    // Check if cache hit
-    if(cache.has(key)){
-        console.log(`Cache Hit...`)
-        // If hit, then return the response
-        return res.json({
-            source:"Cache",
-            data:cache.get(key)
-        })
+    // 🔹 Check cache
+    if (cache.has(key)) {
+        const cached = cache.get(key);
+
+        // ✅ TTL check
+        if (Date.now() < cached.expiry) {
+            console.log("Cache Hit");
+            return res.json({
+                source: "cache",
+                data: cached.data
+            });
+        }
+
+        // ❌ Expired
+        console.log("Cache Expired");
+        cache.delete(key);
     }
-    // If cache miss
-    console.log(`Cache miss...`);
-    //  fetch the data from original api
-    const data = await fethcWeatherData(city)
 
-    // Store in cache
-    cache.set(key, {data, expiry: Date.now() + 10000}) // Updating the cache .It usually takes key , data and TTl(Time To Live) as a params
-    
-    // Send response in json
+    // 🔴 Cache Miss
+    console.log("Cache Miss");
+
+    const data = await fetchWeatherData(city);
+
+    // ✅ Store with TTL
+    cache.set(key, {
+        data,
+        expiry: Date.now() + 10000 // 10 sec
+    });
+
     res.json({
-        source : 'api',
-        data : data
-    })
-})
+        source: "api",
+        data
+    });
+});
 
 app.listen(3000, () => {
-    console.log(`Server listening...`)
-})
-
+    console.log("Server listening...");
+});
 // Request
 //  ↓
 // Check cache
