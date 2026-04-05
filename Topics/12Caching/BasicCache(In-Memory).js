@@ -50,3 +50,10 @@ app.get('/weather/:city', async(req, res) => {
 app.listen(3000, () => {
     console.log(`Server listening...`)
 })
+
+// Request
+//  ↓
+// Check cache
+//    ↓
+// Hit → return fast ⚡
+// Miss → API call 🌐 → store → return
