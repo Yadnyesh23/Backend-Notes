@@ -1,0 +1,2 @@
+// BullMQ is a high-performance Node.js library for managing distributed job queues, whereas Redis is an in-memory data structure store used as the database backend for BullMQ.
+// BullMQ handles task logic (queues, jobs, retries), while Redis stores the data and maintains state. BullMQ is a library, not a database.
