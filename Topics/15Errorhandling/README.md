@@ -41,7 +41,7 @@ In an e-commerce platform, a mistake in the discount calculation logic could res
 - Code reviews and business logic verification
 - Monitoring unusual outputs (e.g., negative transaction values)
 
-### B. Database Errors (Constraint Violations)
+### B. Constraint Violations (Database Errors)
 
 Errors that occur when database-level rules are violated, such as unique constraints, foreign key constraints, or NOT NULL restrictions.
 
