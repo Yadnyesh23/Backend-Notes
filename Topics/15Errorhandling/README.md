@@ -150,24 +150,37 @@ Think of input validation as your API's bouncer: it checks credentials at the do
 ### E. Configuration Errors
 > ⚪ **Server startup** — misconfigured environment caught at boot time
 
-Server-side issues caused by missing or misconfigured **environment variables**, secrets, or settings — typically surfacing at startup time before the app is even ready to serve traffic.
+Server-side issues caused by missing, incorrect, or misconfigured **environment variables**, secrets, feature flags, or infrastructure settings. These typically surface at **startup time** — before your app is ready to serve any traffic — though poorly structured apps sometimes let them slip through to runtime, where they cause harder-to-diagnose failures.
 
-> **Rule of thumb:** Validate all required config values on boot and **fail fast** with a clear error message. A hard crash at startup is far better than a silent misconfiguration causing subtle failures in production.
+Think of configuration as the wiring behind the walls. When it's done right, nobody notices. When it's wrong, nothing works — and the error message often points nowhere near the actual problem.
+
+**Real-world example:**
+> Your app deploys successfully to production, but `DATABASE_URL` was never set in the environment. The server starts, accepts incoming traffic, and then throws a cryptic `connection refused` error on the first database call — affecting every single user while the team scrambles to find why it worked fine in staging.
 
 **Common examples:**
-- Missing `DB_URL` environment variable
-- Invalid or expired API key
-- Wrong port binding
-- Missing `JWT_SECRET`
+- Missing `DATABASE_URL` — the app starts but crashes on the first DB query
+- Wrong `JWT_SECRET` in production — tokens signed in staging are rejected in production, logging everyone out
+- `NODE_ENV` set to `development` in production — debug logs exposed, optimisations disabled
+- Missing third-party API keys (e.g. `STRIPE_SECRET_KEY`, `SENDGRID_API_KEY`) — payment or email features silently fail
+- Wrong port binding — app starts on port `3000` but the load balancer expects `8080`
+- Incorrect cloud storage bucket name — file uploads appear to succeed but are written to a non-existent or wrong bucket
 
----
+**Root causes:**
+- No validation of environment variables at startup
+- Differences between local, staging, and production environments that aren't documented or enforced
+- Secrets managed manually and inconsistently (copy-paste errors, forgotten variables)
+- No `.env.example` file or environment variable documentation for new team members or deployments
 
-## Quick Reference
+**Why they are critical:**
+- Can silently break entire features in production while the app appears to be "running"
+- Misconfigured secrets (e.g. using a test Stripe key in production) can cause real financial or data consequences
+- Hard to debug without proper startup logging — the error often surfaces far from the misconfigured variable
+- Affect the entire application, not just one user or one request
 
-| Type | Severity | When It Occurs | HTTP Signal |
-|---|---|---|---|
-| Logic Errors | 🔴 Critical | Runtime — silent | None (no crash) |
-| Constraint Violations | 🟡 High | DB write operations | `500` if unhandled |
-| External Service Errors | 🟡 High | Any outbound call | `502` / `504` |
-| Input Validation | 🔵 Medium | API entry point | `400 Bad Request` |
-| Configuration Errors | ⚪ Startup | Server boot | App fails to start |
+**Prevention strategies:**
+- **Validate all required environment variables at startup** and fail fast with a descriptive error: `Missing required env var: DATABASE_URL`. A hard crash at boot is far better than a running app with missing config
+- Use a **config validation library** (e.g. `envalid` for Node.js, `pydantic-settings` for Python) to enforce types, required fields, and allowed values on startup
+- Maintain a **`.env.example` file** in your repo — a template listing every required variable with placeholder values, so no deployment is missing a variable by accident
+- Use a **secrets manager** (e.g. AWS Secrets Manager, HashiCorp Vault, Doppler) instead of manually copying secrets across environments
+- Keep **environment parity** between staging and production as close as possible — surprises in production often come from differences that weren't caught in staging
+- Log the loaded configuration summary at startup (with secrets redacted) so you can immediately confirm what values the app is running with
