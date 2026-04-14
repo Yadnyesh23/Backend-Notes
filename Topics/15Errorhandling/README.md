@@ -49,10 +49,10 @@ The system keeps running — no crash, no exception — but it produces **wrong 
 Errors thrown by the database when application-level rules are broken — such as inserting a duplicate value, violating a foreign key, or leaving a required field empty. These usually signal a gap in your **input validation layer**.
 
 **Types of database errors:**
--Connection errors: Occur when the application fails to connect to the database due to issues like wrong credentials, server downtime, or network problems.
--Constraint violations: Happen when a database rule (like primary key, foreign key, or unique constraint) is broken during data insertion or update.
--Validation failures: Arise when input data does not meet required formats, ranges, or conditions before being stored in the database.
--Query errors: Occur when there is a mistake in the SQL query syntax or logic, causing the database to fail executing it.
+- **Connection errors:** Occur when the application fails to connect to the database due to issues like wrong credentials, server downtime, or network problems.  
+- **Constraint violations:** Happen when a database rule (like primary key, foreign key, or unique constraint) is broken during data insertion or update.  
+- **Validation failures:** Arise when input data does not meet required formats, ranges, or conditions before being stored in the database.  
+- **Query errors:** Occur when there is a mistake in the SQL query syntax or logic, causing the database to fail executing it.
 
 **Common examples:**
 - Inserting a duplicate into a `UNIQUE` column (e.g. same email registered twice)
